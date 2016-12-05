@@ -2,27 +2,21 @@ package br.com.productlisting.test.service;
 
 import static org.junit.Assert.assertTrue;
 
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
 
-import org.glassfish.grizzly.http.server.HttpServer;
-import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
-import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import br.com.productlisting.logger.LoggerManager;
-import br.com.productlisting.service.Service;
+import br.com.productlisting.main.ServicePublisher;
 
 /*
- * tests service connection
+ * tests service 
+ * run simple tests
  *
  *@Author: Douglas Reis
  *@Version: 1.0
@@ -30,10 +24,7 @@ import br.com.productlisting.service.Service;
  */
 public class ServiceTest {
 	
-	private final URI BASE_URI = UriBuilder.fromUri("http://localhost/rest").port(8080).build();
-
-	private HttpServer server;
-	private WebTarget target;
+	private ServicePublisher publisher;
 	
 	private List<String> pathList(){
 		return Arrays.asList(
@@ -43,9 +34,8 @@ public class ServiceTest {
 	}
 	@Before
 	public void init() throws Exception  {
-		LoggerManager.info("Starting server: " + BASE_URI.getHost() +":" + BASE_URI.getPort());
-		server = GrizzlyHttpServerFactory.createHttpServer(BASE_URI, new ResourceConfig(Service.class));
-		target = ClientBuilder.newClient().target(BASE_URI).path("service");
+		publisher = new ServicePublisher();
+		publisher.startService();
 	}
 
 	@Test
@@ -57,7 +47,7 @@ public class ServiceTest {
 			List<String> paths = pathList();
 			for(String path : paths){
 				String response = null;
-				response = target.path(path).request().accept(MediaType.APPLICATION_JSON).get(String.class);
+				response = publisher.getTarget().path(path).request().accept(MediaType.APPLICATION_JSON).get(String.class);
 			
 				// tests response
 				assertTrue(response != null);
@@ -76,6 +66,6 @@ public class ServiceTest {
 	@After
 	public void shutDown(){
 		LoggerManager.info("Shutting down server");
-		server.shutdown();
+		publisher.seviceShutDown();
 	}
 }
