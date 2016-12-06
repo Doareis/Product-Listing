@@ -1,16 +1,13 @@
 package br.com.productlisting.test.service;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
-
 import javax.ws.rs.core.MediaType;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import br.com.productlisting.logger.LoggerManager;
 import br.com.productlisting.main.ServicePublisher;
 
@@ -33,13 +30,13 @@ public class ServiceTest {
 				"getProductIncludingParentRelationship/1", "getProductIncludingImageRelationship/1",  "getProductChildren/1", "getImages/1");
 	}
 	@Before
-	public void init() throws Exception  {
+	public void setUp() throws Exception  {
 		publisher = new ServicePublisher();
 		publisher.startService();
 	}
 
 	@Test
-	public void serviceTest(){
+	public void testService(){
 		LoggerManager.info("Starting tests");
 
 		int count = 0;
@@ -58,13 +55,13 @@ public class ServiceTest {
 			LoggerManager.error("Errors on tests: " + e.getMessage());
 
 		}
-		
+		assertEquals(pathList().size(), count + 1);
 		LoggerManager.info(String.format("Tests executed successfully. %d methods were tested", count));
 
 	}
 
 	@After
-	public void shutDown(){
+	public void tearDown(){
 		LoggerManager.info("Shutting down server");
 		publisher.seviceShutDown();
 	}

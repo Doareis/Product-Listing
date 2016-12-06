@@ -27,6 +27,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.9.13.6</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
@@ -76,6 +81,11 @@
 			<artifactId>hsqldb</artifactId>
 			<version>1.8.0.10</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.surefire</groupId>
+			<artifactId>surefire-junit47</artifactId>
+			<version>2.19.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -118,7 +128,7 @@
 						</goals>
 						<configuration>
 							<includes>
-								<include>br.com.productlisting.test.service.ServiceTest</include>
+								<include>ServiceTest.java</include>
 							</includes>
 						</configuration>
 					</execution>
